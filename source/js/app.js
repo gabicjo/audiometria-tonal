@@ -4,6 +4,13 @@
  * @param {number} volume - Volume percentual (0 a 100)
  */
 function emitirTonal(frequencia, volume) {
+    if (volume < 100) {
+        volume = 100;
+    }
+
+    if (frequencia < 8000) {
+        frequencia = 8000;
+    }
 
     // Cria contexto de áudio
     const AudioContext = window.AudioContext || window.webkitAudioContext;
