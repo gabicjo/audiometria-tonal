@@ -57,8 +57,6 @@ function emitirTonal(frequencia, volume) {
     };
 }
 
-
-
 // Detecta pressione da tecla '9' e emite o tom com valores atuais de frequência e volume do HTML
 let somAtual = null;
 let monitorandoVolume = false;
