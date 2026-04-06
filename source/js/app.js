@@ -157,7 +157,7 @@ const VOLUME_MIN = 0;
 const VOLUME_MAX = 100;
 
 // Define o passo inicial e vai adaptando conforme necessidade
-let passoVolume = 5;
+let passoVolume = 15;
 
 // Função para decidir novo passo: binário adaptativo (reduz passo pela metade sempre que possível)
 function ajustarPassoVolume(valorAntes, valorDepois) {
@@ -284,7 +284,7 @@ function abrirPopupFrequencia() {
             setVolume(100);
             ultimoVolumeEscutou = null;
             ultimoVolumeNaoEscutou = null;
-            passoVolume = 5;
+            passoVolume = 15;
 
             if (somAtual && typeof somAtual.parar === 'function') {
                 pararEmissaoAtual();
