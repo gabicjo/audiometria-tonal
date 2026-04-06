@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap');
 
 *,
 *::before,
@@ -9,14 +9,14 @@
 body {
     margin: 0;
     min-height: 100dvh;
-    font-family: "Poppins", sans-serif;
+    font-family: "Cascadia Code", monospace;
     font-weight: 500;
     line-height: 1.55;
-    color: #f4f4f1;
+    color: #f5f5f5;
     background:
-        radial-gradient(circle at top left, rgb(68 45 86 / 20%), transparent 38%),
-        radial-gradient(circle at bottom right, rgb(108 60 138 / 14%), transparent 42%),
-        linear-gradient(145deg, #261230 0%, #30173d 58%, #261230 100%);
+        radial-gradient(circle at top left, rgb(255 106 0 / 9%), transparent 36%),
+        radial-gradient(circle at bottom right, rgb(255 138 51 / 7%), transparent 40%),
+        linear-gradient(145deg, #0a0a0a 0%, #141414 58%, #0a0a0a 100%);
 }
 
 button {

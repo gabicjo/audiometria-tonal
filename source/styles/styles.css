@@ -1,14 +1,14 @@
 :root {
-    --color-bg-primary: #261230;
-    --color-bg-secondary: #30173d;
-    --color-surface: #382046;
-    --color-surface-soft: #412952;
-    --color-border: #5f4771;
-    --color-text: #f4f4f1;
-    --color-text-muted: #baaec6;
-    --color-accent: #d7ff64;
-    --color-accent-strong: #e5ff92;
-    --color-accent-text: #121212;
+    --color-bg-primary: #0a0a0a;
+    --color-bg-secondary: #141414;
+    --color-surface: #1b1b1b;
+    --color-surface-soft: #242424;
+    --color-border: #333333;
+    --color-text: #f5f5f5;
+    --color-text-muted: #a7a7a7;
+    --color-accent: #ff6a00;
+    --color-accent-strong: #ff8a33;
+    --color-accent-text: #0f0f0f;
 
     --font-family-base: "Poppins", sans-serif;
     --font-size-body: 0.95rem;
@@ -55,7 +55,7 @@ main {
     padding: clamp(var(--space-5), 8vw, var(--space-8));
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    background: linear-gradient(165deg, rgb(65 41 82 / 88%), rgb(56 32 70 / 92%));
+    background: linear-gradient(165deg, rgb(36 36 36 / 88%), rgb(27 27 27 / 92%));
     backdrop-filter: blur(6px);
 }
 
@@ -125,7 +125,7 @@ button {
 
 #escutou,
 #nao-escutou {
-    background-color: rgb(48 23 61 / 66%);
+    background-color: rgb(24 24 24 / 82%);
     border-color: var(--color-border);
     color: var(--color-text);
 }
@@ -137,7 +137,7 @@ button:hover {
 #start-button:hover,
 #proximo:hover {
     background-color: var(--color-accent-strong);
-    box-shadow: 0 0 0.9rem rgb(215 255 100 / 30%);
+    box-shadow: 0 0 0.9rem rgb(255 106 0 / 30%);
 }
 
 #escutou:hover,
@@ -149,7 +149,7 @@ button:hover {
 button:focus-visible {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgb(215 255 100 / 28%);
+    box-shadow: 0 0 0 3px rgb(255 106 0 / 28%);
 }
 
 button:active {
@@ -183,7 +183,7 @@ button:active {
     display: grid;
     place-items: center;
     padding: var(--space-3);
-    background: rgb(12 7 18 / 68%);
+    background: rgb(8 8 8 / 68%);
     backdrop-filter: blur(4px);
 }
 
@@ -192,7 +192,7 @@ button:active {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: var(--space-4);
-    background: linear-gradient(165deg, rgb(65 41 82 / 94%), rgb(56 32 70 / 96%));
+    background: linear-gradient(165deg, rgb(36 36 36 / 94%), rgb(27 27 27 / 96%));
 }
 
 .freq-modal h3 {
@@ -220,7 +220,7 @@ button:active {
 
 .freq-option:hover {
     border-color: var(--color-border);
-    background-color: rgb(48 23 61 / 60%);
+    background-color: rgb(31 31 31 / 80%);
 }
 
 .freq-option input {
@@ -245,7 +245,11 @@ button:active {
 }
 
 .freq-btn-secondary {
-    background-color: rgb(48 23 61 / 66%);
+    background-color: rgb(24 24 24 / 82%);
     border-color: var(--color-border);
     color: var(--color-text);
+}
+
+span {
+    margin: 0;
 }
