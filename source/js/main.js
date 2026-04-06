@@ -22,4 +22,6 @@ const emissionController = createEmissionController(
     () => testState.getVolume()
 );
 
+testState.resetForNewFrequency();
+
 bindUiEvents({ elements, emissionController, testState });
