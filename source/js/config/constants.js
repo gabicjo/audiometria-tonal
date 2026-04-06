@@ -7,7 +7,7 @@ export const testConfig = {
     minVolume: 0,
     maxVolume: 100,
     initialVolume: 100,
-    initialStep: 5,
+    initialStep: 15,
     monitorIntervalMs: 80
 };
 
