@@ -61,6 +61,10 @@ function emitirTonal(frequencia, volume) {
 let somAtual = null;
 let monitorandoVolume = false;
 let volumeInterval = null;
+const startPage = document.getElementById('start-page');
+const examPage = document.getElementById('exam-page');
+const startButton = document.getElementById('start-button');
+const mobilePlayToneButton = document.getElementById('mobile-play-tone');
 
 function iniciarMonitoramentoVolume() {
     if (monitorandoVolume || !somAtual) return;
@@ -82,38 +86,67 @@ function pararMonitoramentoVolume() {
     }
 }
 
+function iniciarEmissaoAtual() {
+    const freqElemAtual = document.getElementById('frequencia-number');
+    const volElemAtual = document.getElementById('volume-number');
+    if (!freqElemAtual || !volElemAtual) return;
+
+    const frequencia = parseFloat(freqElemAtual.textContent);
+    const volume = parseFloat(volElemAtual.textContent);
+
+    if (somAtual && typeof somAtual.parar === 'function') {
+        somAtual.parar();
+        somAtual = null;
+    }
+
+    somAtual = emitirTonal(frequencia, volume);
+    iniciarMonitoramentoVolume();
+}
+
+function pararEmissaoAtual() {
+    if (somAtual && typeof somAtual.parar === 'function') {
+        somAtual.parar();
+        somAtual = null;
+    }
+    pararMonitoramentoVolume();
+}
+
 window.addEventListener('keydown', function(event) {
     // Verifica se '9' foi pressionado e não está repetindo o evento se segurado
     if ((event.key === '9' || event.keyCode === 57) && !event.repeat) {
-        // Obtém frequência e volume dos elementos na página
-        const freqElem = document.getElementById('frequencia-number');
-        const volElem = document.getElementById('volume-number');
-        if (!freqElem || !volElem) return;
-
-        const frequencia = parseFloat(freqElem.textContent);
-        const volume = parseFloat(volElem.textContent);
-
-        // Se já tem tom tocando, para ele antes de tocar novo
-        if (somAtual && typeof somAtual.parar === 'function') {
-            somAtual.parar();
-            somAtual = null;
-        }
-        // Emite o novo tom
-        somAtual = emitirTonal(frequencia, volume);
-        iniciarMonitoramentoVolume();
+        iniciarEmissaoAtual();
     }
 });
 
 // Parar o som ao soltar a tecla '9'
 window.addEventListener('keyup', function(event) {
     if ((event.key === '9' || event.keyCode === 57)) {
-        if (somAtual && typeof somAtual.parar === 'function') {
-            somAtual.parar();
-            somAtual = null;
-        }
-        pararMonitoramentoVolume();
+        pararEmissaoAtual();
     }
 });
+
+startButton && startButton.addEventListener('click', () => {
+    startPage && startPage.classList.add('ocultar');
+    startPage && startPage.classList.remove('mostrar');
+    examPage && examPage.classList.remove('ocultar');
+    examPage && examPage.classList.add('mostrar');
+});
+
+if (mobilePlayToneButton) {
+    const iniciar = (event) => {
+        event.preventDefault();
+        iniciarEmissaoAtual();
+    };
+    const parar = (event) => {
+        event.preventDefault();
+        pararEmissaoAtual();
+    };
+
+    mobilePlayToneButton.addEventListener('pointerdown', iniciar);
+    mobilePlayToneButton.addEventListener('pointerup', parar);
+    mobilePlayToneButton.addEventListener('pointercancel', parar);
+    mobilePlayToneButton.addEventListener('pointerleave', parar);
+}
 
 // Seleciona os elementos dos botões e do volume
 const btnEscutou = document.getElementById('escutou');
@@ -254,10 +287,8 @@ function abrirPopupFrequencia() {
             passoVolume = 5;
 
             if (somAtual && typeof somAtual.parar === 'function') {
-                somAtual.parar();
-                somAtual = null;
+                pararEmissaoAtual();
             }
-            pararMonitoramentoVolume();
         }
         fechar();
     });
