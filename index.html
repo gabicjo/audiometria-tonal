@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audiometria Tonal</title>
+    <link rel="stylesheet" href="source/styles/global.css">
+    
 </head>
 <body>
     <main>
-        <div id="start-page">
-            <button type="button" id="start-button">Iniciar Teste<button>
+        <div id="start-page" class="mostrar">
+            <button type="button" id="start-button">Iniciar Teste</button>
         </div>
-        <div id="exam-page" class="mostrar">
+        <div id="exam-page" class="ocultar">
             <h1 id="frequencia">
                 <span id="frequencia-number">400</span>
                 <span>hz</span>
@@ -26,5 +28,6 @@
             </div>
         </div>
     </main>
+    <script src="source/js/app.js"></script>
 </body>
 </html>
