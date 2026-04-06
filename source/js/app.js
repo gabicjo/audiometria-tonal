@@ -6,8 +6,11 @@
  * @returns {object} { parar, atualizarVolume }
  */
 function emitirTonal(frequencia, volume) {
-    if (frequencia < 8000) {
-        frequencia = 8000;
+    // Mantém a frequência dentro de uma faixa segura/audível.
+    if (frequencia < 20) {
+        frequencia = 20;
+    } else if (frequencia > 20000) {
+        frequencia = 20000;
     }
 
     // Cria contexto de áudio
