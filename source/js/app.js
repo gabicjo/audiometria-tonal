@@ -248,9 +248,16 @@ function abrirPopupFrequencia() {
         const selecionada = form.querySelector('input[name="frequencia"]:checked');
         if (selecionada && freqElem) {
             freqElem.textContent = selecionada.value;
+            setVolume(100);
             ultimoVolumeEscutou = null;
             ultimoVolumeNaoEscutou = null;
             passoVolume = 5;
+
+            if (somAtual && typeof somAtual.parar === 'function') {
+                somAtual.parar();
+                somAtual = null;
+            }
+            pararMonitoramentoVolume();
         }
         fechar();
     });
