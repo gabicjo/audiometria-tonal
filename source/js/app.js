@@ -116,6 +116,7 @@ window.addEventListener('keyup', function(event) {
 const btnEscutou = document.getElementById('escutou');
 const btnNaoEscutou = document.getElementById('nao-escutou');
 const volElem = document.getElementById('volume-number');
+const freqElem = document.getElementById('frequencia-number');
 const VOLUME_MIN = 0;
 const VOLUME_MAX = 100;
 
@@ -178,8 +179,82 @@ btnNaoEscutou.addEventListener('click', () => {
 
 // Sempre que a frequência mudar, ou usuário clicar em "Próximo", zere limites de busca
 const btnProximo = document.getElementById('proximo');
-btnProximo && btnProximo.addEventListener('click', () => {
-    ultimoVolumeEscutou = null;
-    ultimoVolumeNaoEscutou = null;
-    passoVolume = 5;
-});
+const FREQUENCIAS_DISPONIVEIS = [250, 500, 1000, 2000, 4000];
+
+function abrirPopupFrequencia() {
+    const overlay = document.createElement('div');
+    overlay.className = 'freq-modal-overlay';
+
+    const modal = document.createElement('div');
+    modal.className = 'freq-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'freq-modal-title');
+
+    const valorAtual = parseInt(freqElem?.textContent || '1000', 10);
+    const opcaoInicial = FREQUENCIAS_DISPONIVEIS.includes(valorAtual)
+        ? valorAtual
+        : FREQUENCIAS_DISPONIVEIS[0];
+
+    modal.innerHTML = `
+        <h3 id="freq-modal-title">Selecione a frequência</h3>
+        <form id="freq-modal-form">
+            <div class="freq-options">
+                ${FREQUENCIAS_DISPONIVEIS.map((freq) => `
+                    <label class="freq-option">
+                        <input type="radio" name="frequencia" value="${freq}" ${freq === opcaoInicial ? 'checked' : ''}>
+                        <span>${freq} Hz</span>
+                    </label>
+                `).join('')}
+            </div>
+            <div class="freq-modal-actions">
+                <button type="button" class="freq-btn freq-btn-secondary" id="freq-cancelar">Cancelar</button>
+                <button type="submit" class="freq-btn freq-btn-primary">Confirmar</button>
+            </div>
+        </form>
+    `;
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    const form = modal.querySelector('#freq-modal-form');
+    const btnCancelar = modal.querySelector('#freq-cancelar');
+    const primeiroRadio = modal.querySelector('input[name="frequencia"]');
+
+    function fechar() {
+        overlay.remove();
+    }
+
+    btnCancelar.addEventListener('click', fechar);
+
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            fechar();
+        }
+    });
+
+    window.addEventListener('keydown', function fecharComEsc(event) {
+        if (event.key === 'Escape') {
+            fechar();
+            window.removeEventListener('keydown', fecharComEsc);
+        }
+    });
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const selecionada = form.querySelector('input[name="frequencia"]:checked');
+        if (selecionada && freqElem) {
+            freqElem.textContent = selecionada.value;
+            ultimoVolumeEscutou = null;
+            ultimoVolumeNaoEscutou = null;
+            passoVolume = 5;
+        }
+        fechar();
+    });
+
+    if (primeiroRadio) {
+        primeiroRadio.focus();
+    }
+}
+
+btnProximo && btnProximo.addEventListener('click', abrirPopupFrequencia);
