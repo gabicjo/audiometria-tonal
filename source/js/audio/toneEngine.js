@@ -15,7 +15,7 @@ export function createToneSession(frequencyHz, volumePercent) {
 
     oscillator.type = 'sine';
     oscillator.frequency.value = clampedFrequency;
-    gainNode.gain.value = normalizeVolume(volumePercent);
+    gainNode.gain.value = mapVolumePercentToGain(volumePercent);
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
@@ -40,19 +40,26 @@ export function createToneSession(frequencyHz, volumePercent) {
      * @returns {void}
      */
     function updateVolume(nextVolumePercent) {
-        gainNode.gain.setValueAtTime(normalizeVolume(nextVolumePercent), audioContext.currentTime);
+        const nextGain = mapVolumePercentToGain(nextVolumePercent);
+        gainNode.gain.cancelScheduledValues(audioContext.currentTime);
+        gainNode.gain.setTargetAtTime(nextGain, audioContext.currentTime, 0.02);
     }
 
     return { stop, updateVolume };
 }
 
 /**
- * Normaliza o volume percentual para ganho entre 0 e 1.
+ * Converte volume percentual para ganho com curva perceptual.
+ * A escala em dB torna as mudanças de volume mais perceptíveis em celulares.
  * @param {number} volumePercent Volume percentual.
- * @returns {number} Ganho normalizado.
+ * @returns {number} Ganho linear para o Web Audio.
  */
-function normalizeVolume(volumePercent) {
-    return Math.max(0, Math.min(volumePercent, 100)) / 100;
+function mapVolumePercentToGain(volumePercent) {
+    const clampedPercent = Math.max(0, Math.min(volumePercent, 100));
+    if (clampedPercent === 0) return 0;
+    const minDb = -48;
+    const db = minDb + ((clampedPercent / 100) * Math.abs(minDb));
+    return Math.pow(10, db / 20);
 }
 
 /**
