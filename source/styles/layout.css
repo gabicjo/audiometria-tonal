@@ -1,0 +1,88 @@
+main {
+    width: min(100%, 72rem);
+    min-height: min(42rem, calc(100dvh - var(--space-8)));
+    margin: 0 auto;
+    padding: var(--space-8) clamp(var(--space-3), 4vw, var(--space-6));
+    display: grid;
+    align-items: center;
+}
+
+#start-page,
+#exam-page {
+    width: min(100%, 56rem);
+    margin: 0 auto;
+    padding: clamp(var(--space-5), 8vw, var(--space-8));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(165deg, rgb(36 36 36 / 88%), rgb(27 27 27 / 92%));
+    backdrop-filter: blur(6px);
+}
+
+#start-page {
+    text-align: center;
+    display: none;
+}
+
+#start-page .start-actions {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: center;
+}
+
+#exam-page {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-3);
+}
+
+#frequencia,
+#volume {
+    margin: 0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-text);
+}
+
+#frequencia {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-title);
+}
+
+#volume {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    color: var(--color-text-muted);
+}
+
+#frequencia-number,
+#volume-number {
+    color: var(--color-accent);
+}
+
+#buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+@media (max-width: 48rem) {
+    main {
+        padding-top: var(--space-6);
+        padding-bottom: var(--space-6);
+    }
+
+    #exam-page {
+        gap: var(--space-4);
+    }
+
+    #buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #start-page {
+        display: block;
+    }
+}
