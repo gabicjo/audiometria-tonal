@@ -61,6 +61,7 @@ main {
 
 #start-page {
     text-align: center;
+    display: none;
 }
 
 #start-page .start-actions {
@@ -88,6 +89,7 @@ main {
 #exam-page {
     display: grid;
     gap: var(--space-6);
+    margin-top: var(--space-3);
 }
 
 #frequencia,
@@ -200,6 +202,10 @@ button:active {
 
     #mobile-play-tone {
         display: inline-flex;
+    }
+
+    #start-page {
+        display: block;
     }
 }
 
