@@ -73,3 +73,31 @@ window.addEventListener('keyup', function(event) {
         }
     }
 });
+
+// Seleciona os elementos dos botões e do volume
+const btnEscutou = document.getElementById('escutou');
+const btnNaoEscutou = document.getElementById('nao-escutou');
+const volElem = document.getElementById('volume-number');
+const VOLUME_MIN = 0;
+const VOLUME_MAX = 100;
+const PASSO_VOLUME = 5;
+
+// Garantia: converte para número sempre que manipular
+function setVolume(novoVolume) {
+    let v = Math.round(novoVolume);
+    if (v > VOLUME_MAX) v = VOLUME_MAX;
+    if (v < VOLUME_MIN) v = VOLUME_MIN;
+    volElem.textContent = v;
+}
+
+// Quando usuário escutou: diminui o volume
+btnEscutou.addEventListener('click', () => {
+    let atual = parseInt(volElem.textContent, 10);
+    setVolume(atual - PASSO_VOLUME);
+});
+
+// Quando usuário não escutou: aumenta o volume
+btnNaoEscutou.addEventListener('click', () => {
+    let atual = parseInt(volElem.textContent, 10);
+    setVolume(atual + PASSO_VOLUME);
+});
