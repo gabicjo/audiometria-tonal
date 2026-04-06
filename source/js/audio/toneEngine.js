@@ -1,4 +1,4 @@
-import { toneLimits } from '../config/constants.js';
+import { testConfig, toneLimits } from '../config/constants.js';
 
 /**
  * Cria e inicia um tom senoidal com controle de volume em tempo real.
@@ -57,9 +57,7 @@ export function createToneSession(frequencyHz, volumePercent) {
 function mapVolumePercentToGain(volumePercent) {
     const clampedPercent = Math.max(0, Math.min(volumePercent, 100));
     if (clampedPercent === 0) return 0;
-    const minDb = -48;
-    const db = minDb + ((clampedPercent / 100) * Math.abs(minDb));
-    return Math.pow(10, db / 20);
+    return (clampedPercent / 100) * testConfig.maxOutputGain;
 }
 
 /**
