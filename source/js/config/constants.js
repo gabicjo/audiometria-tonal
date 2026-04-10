@@ -7,7 +7,7 @@ export const testConfig = {
     minVolume: 0,
     maxVolume: 100,
     monitorIntervalMs: 80,
-    maxOutputGain: 0.2,
+    maxOutputGain: 0.1,
     initialOutputGain: 0.1,
     minAudibleOutputGain: 0.001,
     heardDecreaseFactor: 0.7,

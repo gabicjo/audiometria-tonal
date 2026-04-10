@@ -65,18 +65,27 @@ export function createTestState(volumeBindings, onVolumeChanged) {
 /**
  * Converte percentual de UI para ganho de saída.
  * @param {number} volumePercent Valor percentual exibido na interface.
- * @returns {number} Ganho linear.
+ * @returns {number} Ganho logaritimico.
  */
 function volumePercentToGain(volumePercent) {
-    return (Math.max(0, Math.min(volumePercent, 100)) / 100) * testConfig.maxOutputGain;
+  const percent = Math.max(0, Math.min(volumePercent, 100)) / 100;
+
+  // curva log aproximada (mais realista pro ouvido)
+  return testConfig.maxOutputGain * Math.pow(percent, 2);
 }
 
 /**
  * Converte ganho de saída para percentual de UI.
- * @param {number} outputGain Ganho linear de saída.
+ * @param {number} outputGain Ganho logaritmico de saída.
  * @returns {number} Percentual equivalente.
  */
 function gainToVolumePercent(outputGain) {
-    const clampedGain = Math.max(0, Math.min(outputGain, testConfig.maxOutputGain));
-    return (clampedGain / testConfig.maxOutputGain) * 100;
+  const clampedGain = Math.max(
+    0,
+    Math.min(outputGain, testConfig.maxOutputGain),
+  );
+
+  const normalized = clampedGain / testConfig.maxOutputGain;
+
+  return Math.pow(normalized, 1 / 2) * 100;
 }
