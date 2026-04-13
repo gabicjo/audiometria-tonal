@@ -1,0 +1,15 @@
+{
+  "name": "audiometria-tonal",
+  "version": "1.0.0",
+  "description": "Projeto de audiometria tonal",
+  "main": "source/js/main.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@babel/preset-env": "^7.23.9"
+  },
+  "type": "module"
+}
