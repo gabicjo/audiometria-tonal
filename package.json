@@ -4,8 +4,8 @@
   "description": "Projeto de audiometria tonal",
   "main": "source/js/main.js",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+    "test:watch": "node --experimental-vm-modules ./node_modules/.bin/jest --watch"
   },
   "devDependencies": {
     "jest": "^29.7.0",

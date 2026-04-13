@@ -1,3 +1,4 @@
+import { jest, describe, beforeEach, test, expect } from '@jest/globals';
 import { createToneSession } from '../../js/audio/toneEngine.js';
 import { testConfig, toneLimits } from '../../js/config/constants.js';
 

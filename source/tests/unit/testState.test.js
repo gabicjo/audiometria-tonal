@@ -1,68 +1,86 @@
-
+import { jest, describe, beforeEach, test, expect } from '@jest/globals';
 import { createTestState } from '../../js/state/testState.js';
+import { testConfig } from '../../js/config/constants.js';
 
 describe('createTestState', () => {
-  let mockVolumeTextFunctions;
+  let currentVolume;
+  let mockSetVolumeText;
+  let mockVolumeBindings;
   let mockVolumeUpdateCallback;
   let testState;
 
   beforeEach(() => {
-    mockVolumeTextFunctions = {
-      getVolumeText: jest.fn(() => '50'),
-      setVolumeText: jest.fn(),
+    currentVolume = 50;
+    mockSetVolumeText = jest.fn((value) => {
+      currentVolume = value;
+    });
+    mockVolumeBindings = {
+      getVolumeText: jest.fn(() => String(currentVolume)),
+      setVolumeText: mockSetVolumeText,
     };
     mockVolumeUpdateCallback = jest.fn();
-    testState = createTestState(mockVolumeTextFunctions, mockVolumeUpdateCallback);
+    testState = createTestState(mockVolumeBindings, mockVolumeUpdateCallback);
   });
 
-  test('should initialize with default values and update DOM text', () => {
+  test('should read current volume from bindings', () => {
     expect(testState.getVolume()).toBe(50);
-    expect(mockVolumeTextFunctions.setVolumeText).toHaveBeenCalledWith(50);
-    expect(testState.getFrequency()).toBe(0);
   });
 
-  test('should set frequency correctly', () => {
-    testState.setFrequency(1000);
-    expect(testState.getFrequency()).toBe(1000);
-  });
-
-  test('should increment volume and call update callback', () => {
-    testState.incrementVolume();
+  test('should set volume and notify callback', () => {
+    testState.setVolume(55);
     expect(testState.getVolume()).toBe(55);
-    expect(mockVolumeTextFunctions.setVolumeText).toHaveBeenCalledWith(55);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(55);
     expect(mockVolumeUpdateCallback).toHaveBeenCalledWith(55);
   });
 
-  test('should decrement volume and call update callback', () => {
-    testState.decrementVolume();
-    expect(testState.getVolume()).toBe(45);
-    expect(mockVolumeTextFunctions.setVolumeText).toHaveBeenCalledWith(45);
-    expect(mockVolumeUpdateCallback).toHaveBeenCalledWith(45);
+  test('should round to one decimal place when setting volume', () => {
+    testState.setVolume(62.56);
+    expect(testState.getVolume()).toBe(62.6);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(62.6);
   });
 
-  test('should reset volume and frequency for new frequency', () => {
-    testState.setFrequency(2000);
-    testState.incrementVolume(); // Volume becomes 55
-    testState.resetForNewFrequency();
-    expect(testState.getVolume()).toBe(0);
-    expect(mockVolumeTextFunctions.setVolumeText).toHaveBeenCalledWith(0);
-    expect(testState.getFrequency()).toBe(2000); // Frequency should remain the same
-    expect(mockVolumeUpdateCallback).toHaveBeenCalledWith(0); // Callback should be called with new volume
+  test('should clamp volume to min and max bounds', () => {
+    testState.setVolume(testConfig.maxVolume + 10);
+    expect(testState.getVolume()).toBe(testConfig.maxVolume);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(testConfig.maxVolume);
+    testState.setVolume(testConfig.minVolume - 10);
+    expect(testState.getVolume()).toBe(testConfig.minVolume);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(testConfig.minVolume);
   });
 
-  test('should not increment volume beyond max limit', () => {
-    for (let i = 0; i < 20; i++) { // Max volume is 100, starting at 50, increment by 5
-      testState.incrementVolume();
-    }
+  test('markHeard should reduce volume based on heard factor', () => {
+    testState.markHeard();
+    expect(testState.getVolume()).toBe(35);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(35);
+    expect(mockVolumeUpdateCallback).toHaveBeenCalledWith(35);
+  });
+
+  test('markNotHeard should increase volume based on not-heard factor', () => {
+    testState.markNotHeard();
+    expect(testState.getVolume()).toBe(62.5);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(62.5);
+    expect(mockVolumeUpdateCallback).toHaveBeenCalledWith(62.5);
+  });
+
+  test('markHeard should not go below minimum audible gain', () => {
+    currentVolume = 0;
+    testState.markHeard();
+    expect(testState.getVolume()).toBe(1);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(1);
+  });
+
+  test('markNotHeard should not exceed max output gain', () => {
+    currentVolume = 100;
+    testState.markNotHeard();
     expect(testState.getVolume()).toBe(100);
-    expect(mockVolumeTextFunctions.setVolumeText).toHaveBeenCalledWith(100);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(100);
   });
 
-  test('should not decrement volume below min limit', () => {
-    for (let i = 0; i < 20; i++) { // Min volume is 0, starting at 50, decrement by 5
-      testState.decrementVolume();
-    }
-    expect(testState.getVolume()).toBe(0);
-    expect(mockVolumeTextFunctions.setVolumeText).toHaveBeenCalledWith(0);
+  test('should reset volume to initial output gain for new frequency', () => {
+    testState.setVolume(40);
+    testState.resetForNewFrequency();
+    expect(testState.getVolume()).toBe(100);
+    expect(mockSetVolumeText).toHaveBeenCalledWith(100);
+    expect(mockVolumeUpdateCallback).toHaveBeenCalledWith(100);
   });
 });
